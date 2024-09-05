@@ -10,25 +10,35 @@ import { v4 as uuidv4 } from "uuid";
 import { useToast } from "@/hooks/use-toast";
 import { useUploadFiles } from "@xixixao/uploadstuff/react";
 
+function getConvexApibyProvider(provider: string = "Openai") {
+  return provider === "Openai"
+    ? api.openai
+    : provider === "Eleven Labs"
+      ? api.elevenlabs
+      : provider === "Unreal Speech"
+        ? api.unreal
+        : api.openai;
+}
+
 const useGeneratePodcast = ({
-  setAudio,
-  voiceType,
   voicePrompt,
+  setAudioUrl,
   setAudioStorageId,
+  voiceType,
+  voiceProvider,
 }: GeneratePodcastProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
-
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
-  const { startUpload } = useUploadFiles(generateUploadUrl);
-
-  const getPodcastAudio = useAction(api.openai.generateAudioAction);
-
+  const generateUploadUrlMutation = useMutation(api.files.generateUploadUrl);
+  const { startUpload } = useUploadFiles(generateUploadUrlMutation);
+  const getPodcastAudio = useAction(
+    getConvexApibyProvider(voiceProvider).generateAudioAction
+  );
   const getAudioUrl = useMutation(api.podcasts.getUrl);
 
   const generatePodcast = async () => {
     setIsGenerating(true);
-    setAudio("");
+    setAudioUrl("");
 
     if (!voicePrompt) {
       toast({
@@ -39,31 +49,26 @@ const useGeneratePodcast = ({
 
     try {
       const response = await getPodcastAudio({
-        voice: voiceType,
         input: voicePrompt,
+        voice: voiceType,
       });
-
-      const blob = new Blob([response], { type: "audio/mpeg" });
-      const fileName = `podcast-${uuidv4()}.mp3`;
-      const file = new File([blob], fileName, { type: "audio/mpeg" });
-
+      const filename = `podcast-${uuidv4()}.mp3`;
+      const file = new File([response], filename, { type: "audio/mpeg" });
       const uploaded = await startUpload([file]);
       const storageId = (uploaded[0].response as any).storageId;
-
       setAudioStorageId(storageId);
-
       const audioUrl = await getAudioUrl({ storageId });
-      setAudio(audioUrl!);
-      setIsGenerating(false);
+      setAudioUrl(audioUrl!);
       toast({
         title: "Podcast generated successfully",
       });
     } catch (error) {
-      console.log("Error generating podcast", JSON.stringify(error, null, 2));
+      console.log("Error generating podcast", error);
       toast({
         title: "Error creating a podcast",
         variant: "destructive",
       });
+    } finally {
       setIsGenerating(false);
     }
   };
@@ -77,12 +82,12 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
   return (
     <div>
       <div className="flex flex-col gap-2.5">
-        <Label className="text-16 font-bold text-white-1">
-          AI Prompt to generate Podcast
+        <Label htmlFor="" className="text-16 font-bold text-white-1">
+          AI prompt
         </Label>
         <Textarea
           className="input-class font-light focus-visible:ring-offset-orange-1"
-          placeholder="Provide text to generate audio"
+          placeholder="Provide text for the podcast"
           rows={5}
           value={props.voicePrompt}
           onChange={(e) => props.setVoicePrompt(e.target.value)}
@@ -90,29 +95,29 @@ const GeneratePodcast = (props: GeneratePodcastProps) => {
       </div>
       <div className="mt-5 w-full max-w-[200px]">
         <Button
-          type="submit"
+          type="button"
           className="text-16 bg-orange-1 py-4 font-bold text-white-1"
           onClick={generatePodcast}
         >
           {isGenerating ? (
             <>
-              Generating
+              Generating...
               <Loader size={20} className="animate-spin ml-2" />
             </>
           ) : (
-            "Generate"
+            "Generate Podcast"
           )}
         </Button>
       </div>
-      {props.audio && (
+      {props.audioUrl && (
         <audio
+          src={props.audioUrl}
           controls
-          src={props.audio}
           autoPlay
           className="mt-5"
-          onLoadedMetadata={(e) =>
-            props.setAudioDuration(e.currentTarget.duration)
-          }
+          onLoadedMetadata={(e) => {
+            props.setAudioDuration(e.currentTarget.duration);
+          }}
         />
       )}
     </div>

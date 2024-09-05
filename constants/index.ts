@@ -13,14 +13,9 @@ export const sidebarLinks = [
   },
   {
     imgURL: "/icons/microphone.svg",
-    route: "/create-podcast",
+    route: "/create",
     label: "Create Podcast",
-  },
-  {
-    imgURL: "/icons/pricing.svg",
-    route: "/pricing",
-    label: "Pricing",
-  },
+  }
 ];
 
 export const pricingPlans = [
