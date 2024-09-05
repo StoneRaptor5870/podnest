@@ -19,7 +19,7 @@ export interface TopPodcastersProps {
   clerkId: string;
   name: string;
   podcast: {
-    podcastTitle: string;
+    title: string;
     podcastId: Id<"podcasts">;
   }[];
   totalPodcasts: number;
@@ -28,13 +28,13 @@ export interface TopPodcastersProps {
 export interface PodcastProps {
   _id: Id<"podcasts">;
   _creationTime: number;
-  audioStorageId: Id<"_storage"> | null;
+  audioStorageId?: Id<"_storage"> | null;
   user: Id<"users">;
-  podcastTitle: string;
-  podcastDescription: string;
-  audioUrl: string | null;
-  imageUrl: string | null;
-  imageStorageId: Id<"_storage"> | null;
+  title: string;
+  description: string;
+  audioUrl?: string | null;
+  imageUrl?: string | null;
+  imageStorageId?: Id<"_storage"> | null;
   author: string;
   authorId: string;
   authorImageUrl: string;
@@ -52,8 +52,9 @@ export interface ProfilePodcastProps {
 
 export interface GeneratePodcastProps {
   voiceType: string;
-  setAudio: Dispatch<SetStateAction<string>>;
-  audio: string;
+  voiceProvider: string;
+  setAudioUrl: Dispatch<SetStateAction<string>>;
+  audioUrl: string;
   setAudioStorageId: Dispatch<SetStateAction<Id<"_storage"> | null>>;
   voicePrompt: string;
   setVoicePrompt: Dispatch<SetStateAction<string>>;
@@ -80,23 +81,23 @@ export interface LatestPodcastCardProps {
 }
 
 export interface PodcastDetailPlayerProps {
-  audioUrl: string;
-  podcastTitle: string;
+  audioUrl?: string;
+  title: string;
   author: string;
   isOwner: boolean;
-  imageUrl: string;
+  imageUrl?: string;
   podcastId: Id<"podcasts">;
-  imageStorageId: Id<"_storage">;
-  audioStorageId: Id<"_storage">;
-  authorImageUrl: string;
+  imageStorageId?: Id<"_storage">;
+  audioStorageId?: Id<"_storage">;
+  authorImageUrl?: string;
   authorId: string;
 }
 
 export interface AudioProps {
   title: string;
-  audioUrl: string;
+  audioUrl?: string;
   author: string;
-  imageUrl: string;
+  imageUrl?: string;
   podcastId: string;
 }
 
@@ -113,7 +114,7 @@ export interface PodcastCardProps {
 }
 
 export interface CarouselProps {
-  fansLikeDetail: TopPodcastersProps[];
+  fansLikeDetails: TopPodcastersProps[];
 }
 
 export interface ProfileCardProps {
@@ -126,4 +127,17 @@ export type UseDotButtonType = {
   selectedIndex: number;
   scrollSnaps: number[];
   onDotButtonClick: (index: number) => void;
+};
+
+export type VoiceType = {
+  provider: string;
+  voices: string[];
+};
+
+export type Plan = {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  benefits: string[];
 };

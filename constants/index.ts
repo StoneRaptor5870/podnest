@@ -1,3 +1,5 @@
+import { VoiceType } from "@/types";
+
 export const sidebarLinks = [
   {
     imgURL: "/icons/home.svg",
@@ -11,35 +13,62 @@ export const sidebarLinks = [
   },
   {
     imgURL: "/icons/microphone.svg",
-    route: "/create",
+    route: "/create-podcast",
     label: "Create Podcast",
+  },
+  {
+    imgURL: "/icons/pricing.svg",
+    route: "/pricing",
+    label: "Pricing",
   },
 ];
 
-export const voiceDetails = [
+export const pricingPlans = [
   {
-    id: 1,
-    name: "alloy",
+    id: "free_plan",
+    name: "free",
+    description: "For individuals",
+    price: 0,
+    benefits: ["Unlimited listening", "10 rants per month (non OpenAI)"],
   },
   {
-    id: 2,
-    name: "echo",
+    id: "plan_OrUYhPDCK9uoVI",
+    name: "Starter",
+    description: "For starters serious about rants.",
+    price: 99,
+    benefits: [
+      "Everything in free",
+      "60 rants per month",
+      "30 rants per month with OpenAI voices",
+      "Verified Creator Badge",
+    ],
   },
   {
-    id: 3,
-    name: "fable",
+    id: "plan_OrUZPoFU37B6aU",
+    name: "Pro",
+    description: "For pro ranters.",
+    price: 149,
+    benefits: [
+      "Everything in free",
+      "60 rants per month",
+      "30 rants per month with OpenAI voices",
+      "Verified Creator Badge",
+    ],
+  },
+];
+
+export const voiceDetails: VoiceType[] = [
+  {
+    provider: "Unreal Speech",
+    voices: ["Scarlett", "Dan"],
   },
   {
-    id: 4,
-    name: "onyx",
+    provider: "Eleven Labs",
+    voices: ["Rachel", "Drew"],
   },
   {
-    id: 5,
-    name: "nova",
-  },
-  {
-    id: 6,
-    name: "shimmer",
+    provider: "Openai",
+    voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
   },
 ];
 
