@@ -61,3 +61,33 @@ export const getLatestPodcasts = query({
       .order("desc").take(10);
   },
 });
+
+export const getPodcastbyId = query({
+  args: {
+    podcastId: v.id("podcasts"),
+  },
+  handler: async (ctx, { podcastId }) => {
+    return await ctx.db.get(podcastId);
+  },
+});
+
+export const getPodcastsByVoiceType = query({
+  args: {
+    podcastId: v.id("podcasts"),
+  },
+  handler: async (ctx, { podcastId }) => {
+    const podcast = await ctx.db
+      .query("podcasts")
+      .filter((q) => q.eq(q.field("_id"), podcastId))
+      .first();
+    return await ctx.db
+      .query("podcasts")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("voiceType"), podcast?.voiceType),
+          q.neq(q.field("_id"), podcastId)
+        )
+      )
+      .collect();
+  },
+});
