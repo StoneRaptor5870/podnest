@@ -4,8 +4,8 @@ import { v } from "convex/values";
 export default defineSchema({
   podcasts: defineTable({
     user: v.id('users'),
-    podcastTitle: v.string(),
-    podcastDescription: v.string(),
+    title: v.string(),
+    description: v.string(),
     audioUrl: v.optional(v.string()),
     audioStorageId: v.optional(v.id('_storage')),
     imageUrl: v.optional(v.string()),
@@ -20,8 +20,8 @@ export default defineSchema({
     views: v.number(),
   })
     .searchIndex('search_author', { searchField: 'author' })
-    .searchIndex('search_title', { searchField: 'podcastTitle' })
-    .searchIndex('search_body', { searchField: 'podcastDescription' }),
+    .searchIndex('search_title', { searchField: 'title' })
+    .searchIndex('search_body', { searchField: 'description' }),
   users: defineTable({
     email: v.string(),
     imageUrl: v.string(),

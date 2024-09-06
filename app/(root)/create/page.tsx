@@ -37,45 +37,82 @@ import { useRouter } from "next/navigation";
 import { SelectGroup } from "@radix-ui/react-select";
 
 const formSchema = z.object({
-  podcastTitle: z.string().min(5, {
+  title: z.string().min(5, {
     message: "Podcast title is required.",
   }),
-  podcastDescription: z.string().min(15, {
+  description: z.string().min(15, {
     message: "Description is required.",
   }),
 });
 
 const CreatePodcast = () => {
+  const router = useRouter();
   const [imagePrompt, setImagePrompt] = useState("");
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
     null
   );
   const [imageUrl, setImageUrl] = useState("");
-
   const [audioUrl, setAudioUrl] = useState("");
   const [audioStorageId, setAudioStorageId] = useState<Id<"_storage"> | null>(
     null
   );
   const [audioDuration, setAudioDuration] = useState(0);
-
   const [voiceType, setVoiceType] = useState({ voice: "", provider: "" });
   const [voicePrompt, setVoicePrompt] = useState("");
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const createPodcast = useMutation(api.podcasts.createPodcast);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      podcastTitle: "",
-      podcastDescription: "",
+      title: "",
+      description: "",
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      setIsSubmitting(true);
+      if (!audioUrl || !imageUrl || !voiceType) {
+        toast({
+          title: "Failed to create podcast",
+          description: "Please try again",
+          variant: "destructive",
+        });
+        console.log("Audio or image is missing");
+        setIsSubmitting(false);
+        return;
+      }
+      const podcast = await createPodcast({
+        title: data.title,
+        description: data.description,
+        voiceType: voiceType.voice,
+        voicePrompt,
+        audioUrl,
+        audioStorageId: audioStorageId!,
+        audioDuration,
+        imagePrompt,
+        views: 0,
+        imageUrl,
+        imageStorageId: imageStorageId!,
+      });
+      toast({
+        title: "Podcast created successfully",
+        description: "Your podcast has been created successfully",
+      });
+      setIsSubmitting(false);
+      router.push(`/`);
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Failed to create podcast",
+        description: "Please try again",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+    }
+    setIsSubmitting(false);
   }
 
   return (
@@ -89,7 +126,7 @@ const CreatePodcast = () => {
           <div className="flex flex-col gap-[30px] border-b border-black-5 pb-10">
             <FormField
               control={form.control}
-              name="podcastTitle"
+              name="title"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2.5">
                   <FormLabel className="text-16 font-bold text-white-1">
@@ -158,7 +195,7 @@ const CreatePodcast = () => {
 
             <FormField
               control={form.control}
-              name="podcastDescription"
+              name="description"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2.5">
                   <FormLabel className="text-16 font-bold text-white-1">
