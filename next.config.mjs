@@ -13,6 +13,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "dutiful-finch-508.convex.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      }
     ],
   },
 };

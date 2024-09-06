@@ -8,14 +8,18 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import Image from "next/image"
+import { useUser } from "@clerk/nextjs";
 
 const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'podcasts'> } }) => {
+  const { user } = useUser();
   const podcast = useQuery(api.podcasts.getPodcastbyId, { podcastId })
   const similarPodcasts = useQuery(api.podcasts.getPodcastsByVoiceType, {
     podcastId: podcastId,
   });
 
   if (!podcast || !similarPodcasts) return <LoaderSpinner />;
+
+  const isOwner = user?.id === podcast.authorId;
 
   return (
     <section className="flex w-full flex-col">
@@ -32,7 +36,11 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
         </figure>
       </header>
 
-      <PodcastDetailsPlayer />
+      <PodcastDetailsPlayer
+        isOwner={isOwner}
+        podcastId={podcast._id}
+        {...podcast}
+      />
 
       <p className="text-white-2 text-16 pb-8 pt-[45px] font-medium max-md:text-center">
         {podcast?.description}
