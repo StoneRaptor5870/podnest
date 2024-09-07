@@ -232,7 +232,7 @@ const CreatePodcast = () => {
               imagePrompt={imagePrompt}
               setImagePrompt={setImagePrompt}
             />
-            <div className="mt-10 w-full">
+            <div className="mt-10 w-full pb-4">
               <Button
                 type="submit"
                 className="text-16 w-full bg-orange-1 py-4 font-extrabold text-white-1 transition-all duration-500 hover:bg-black-1"

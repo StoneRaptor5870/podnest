@@ -91,6 +91,8 @@ const PodcastPlayer = () => {
     setIsPlaying(false);
   };
 
+  const progressValue = currentTime >= duration ? 100 : (currentTime / duration) * 100;
+
   return (
     <div
       className={cn("sticky bottom-0 left-0 flex size-full flex-col", {
@@ -98,7 +100,7 @@ const PodcastPlayer = () => {
       })}
     >
       <Progress
-        value={(currentTime / duration) * 100}
+        value={progressValue}
         className="w-full"
         max={duration}
       />
