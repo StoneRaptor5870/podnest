@@ -61,10 +61,10 @@ export const voiceDetails: VoiceType[] = [
     provider: "Eleven Labs",
     voices: ["Rachel", "Drew"],
   },
-  {
-    provider: "Openai",
-    voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
-  },
+  // {
+  //   provider: "Openai",
+  //   voices: ["alloy", "echo", "fable", "onyx", "nova", "shimmer"],
+  // },
 ];
 
 export const podcastData = [
