@@ -6,7 +6,7 @@ import { ElevenLabsClient } from "elevenlabs";
 import { Readable } from "stream";
 
 const elevenlabs = new ElevenLabsClient({
-  apiKey: process.env.ELEVENLABS_API_KEY,
+  apiKey: process.env.ELEVENLABS_API_KEY!,
 });
 export const generateAudioAction = action({
   args: {
