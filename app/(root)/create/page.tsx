@@ -47,6 +47,7 @@ const formSchema = z.object({
 
 const CreatePodcast = () => {
   const router = useRouter();
+  const [isPlaying, setIsPlaying] = useState(false);
   const [imagePrompt, setImagePrompt] = useState("");
   const [imageStorageId, setImageStorageId] = useState<Id<"_storage"> | null>(
     null
@@ -153,6 +154,7 @@ const CreatePodcast = () => {
                   const voice = value.split("--")[0];
                   const provider = value.split("--")[1];
                   setVoiceType({ voice, provider });
+                  setIsPlaying(false);
                 }}
               >
                 <SelectTrigger
@@ -187,7 +189,11 @@ const CreatePodcast = () => {
               {voiceType.voice && (
                 <audio
                   src={`https://podnest.vercel.app/${voiceType.voice}.mp3`}
-                  autoPlay
+                  controls
+                  autoPlay={isPlaying}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onError={(error) => console.error('Audio error:', error)}
                   className="hidden"
                 />
               )}
