@@ -186,7 +186,7 @@ const CreatePodcast = () => {
               </Select>
               {voiceType.voice && (
                 <audio
-                  src={`/public/${voiceType.voice}.mp3`}
+                  src={`https://podnest.vercel.app/${voiceType.voice}.mp3`}
                   autoPlay
                   className="hidden"
                 />
