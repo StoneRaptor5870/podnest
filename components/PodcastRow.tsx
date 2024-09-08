@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/lib/formatTime";
 import { useAudio } from "@/providers/AudioProvider";
-import { Clock, Play, Timer } from "lucide-react";
+import { Clock, Play } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
@@ -42,6 +42,7 @@ const PodcastRow = ({
     console.log("views");
     router.push(`/podcasts/${id}`, { scroll: true });
   };
+
   return (
     <div className="flex items-center w-full gap-12">
       <figure className="cursor-pointer" onClick={handleViews}>
@@ -54,7 +55,7 @@ const PodcastRow = ({
         />
       </figure>
       <h2
-        className="flex-1 text-16 truncate font-semibold text-white-1 cursor-pointer hover:underline"
+        className="flex-1 text-16 truncate font-semibold text-white-1 cursor-pointer hover:underline hidden md:block"
         title={title}
         onClick={handleViews}
       >
@@ -79,7 +80,7 @@ const PodcastRow = ({
         />
       )}
 
-      <p className="text-12 flex items-center gap-2 font-normal truncate capitalize text-white-4">
+      <p className="text-12 items-center gap-2 font-normal truncate capitalize text-white-4 hidden md:flex">
         <Clock size={20} />
         {formatTime(duration)}
       </p>
