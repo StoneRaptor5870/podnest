@@ -188,7 +188,7 @@ const CreatePodcast = () => {
               </Select>
               {voiceType.voice && (
                 <audio
-                  src={`https://podnest.vercel.app/${voiceType.voice}.mp3`}
+                  src={`/static/${voiceType.voice.toLowerCase()}.mp3`}
                   controls
                   autoPlay={isPlaying}
                   onPlay={() => setIsPlaying(true)}
