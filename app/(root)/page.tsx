@@ -25,7 +25,7 @@ const Home = () => {
           ))}
         </div>
       </section>
-      <section className="flex flex-col gap-5">
+      <section className="flex flex-col gap-5 pb-6">
         <h1 className="text-20 font-bold text-white-1">Latest Podcasts</h1>
         <div className="flex flex-col w-full gap-y-6">
           {latestPodcasts?.map(

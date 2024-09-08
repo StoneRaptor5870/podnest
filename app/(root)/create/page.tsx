@@ -186,7 +186,7 @@ const CreatePodcast = () => {
               </Select>
               {voiceType.voice && (
                 <audio
-                  src={`/${voiceType.voice}.mp3`}
+                  src={`/public/${voiceType.voice}.mp3`}
                   autoPlay
                   className="hidden"
                 />
