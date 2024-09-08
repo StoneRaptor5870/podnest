@@ -19,6 +19,8 @@ const nextConfig = {
       }
     ],
   },
+  assetPrefix: '/_next/static',
+  trailingSlash: true,
 };
 
 export default nextConfig;
